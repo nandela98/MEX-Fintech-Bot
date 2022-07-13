@@ -15,8 +15,8 @@ struct User: Codable, Searchable {
     
     let name: String
 
-    let creationDate: String
+    var creationDate: String = Date().today(format: "MMM dd, yyyy")
     
-    let image: String
+    var image: String = "profileIcon"
     
 }

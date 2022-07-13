@@ -10,10 +10,19 @@ import UIKit
 
 protocol GenericTableViewDataSourceProtocol {
     func search(query: String)
-    func sortData()
 }
 
-final class GenericTableViewDataSource<V, T: Searchable>: NSObject, GenericTableViewDataSourceProtocol, UITableViewDataSource where V: BaseTableViewCell<T> {
+
+/**
+ This Class is used to display data in tableview globally with Generic data
+ - parameter V: BaseTableViewCell
+ - parameter T: Searchable query
+*/
+
+final class GenericTableViewDataSource<V, T: Searchable>: NSObject,
+                                                          GenericTableViewDataSourceProtocol,
+                                                          UITableViewDataSource where V: BaseTableViewCell<T>
+{
     
     private var models          : [T]
     private let configureCell   : CellConfiguration
@@ -31,7 +40,6 @@ final class GenericTableViewDataSource<V, T: Searchable>: NSObject, GenericTable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell: V = tableView.dequeueReusableCell(forIndexPath: indexPath)
         let model = getModelAt(indexPath)
         return configureCell(cell, model)
@@ -48,10 +56,6 @@ final class GenericTableViewDataSource<V, T: Searchable>: NSObject, GenericTable
             let queryToFind = $0.query.range(of: query, options: .caseInsensitive)
             return (queryToFind != nil)
         }
-    }
-    
-    func sortData() {
-        
     }
     
 }

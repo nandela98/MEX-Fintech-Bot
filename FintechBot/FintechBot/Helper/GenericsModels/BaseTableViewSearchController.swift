@@ -8,20 +8,26 @@
 import Foundation
 import UIKit
 
+/**
+ This Class is used to setup searchController, tableView dataSource
+ - parameter V: BaseTableViewCell
+ - parameter T: Searchable query
+*/
+
 class BaseTableViewSearchController<T: BaseTableViewCell<V>, V>: UITableViewController, UISearchBarDelegate where V: Searchable {
     
-    private var strongDataSource : GenericTableViewDataSource<T, V>?
+    private var dataSource : GenericTableViewDataSource<T, V>?
     
     private let searchController = UISearchController(searchResultsController: nil)
     
     var models: [V] = [] {
         didSet {
             DispatchQueue.main.async {
-                self.strongDataSource = GenericTableViewDataSource(models: self.models, configureCell: { cell, model in
+                self.dataSource = GenericTableViewDataSource(models: self.models, configureCell: { cell, model in
                     cell.item = model
                     return cell
                 })
-                self.tableView.dataSource = self.strongDataSource
+                self.tableView.dataSource = self.dataSource
                 self.tableView.reloadData()
             }
         }
@@ -36,12 +42,13 @@ class BaseTableViewSearchController<T: BaseTableViewCell<V>, V>: UITableViewCont
     private func setUpSearchBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.dimsBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
     }
         
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        strongDataSource?.search(query: searchText)
+        dataSource?.search(query: searchText)
         self.tableView.reloadData()
     }
+    
 }
