@@ -53,8 +53,8 @@ fileprivate extension ViewController {
      This method is used to add new bots
     */
     @objc func addNewBotTapped() {
-        showPopupOn(controller: self) { textFieldName in
-            self.insertNewBots(botName: textFieldName)
+        showPopupOn(controller: self) { [weak self] textFieldName in
+            self?.insertNewBots(botName: textFieldName)
         }
     }
     
